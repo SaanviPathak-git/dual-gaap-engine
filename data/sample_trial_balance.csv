@@ -1,0 +1,16 @@
+Account_Code,Account_Name,Financial_Statement,IndAS_Balance,Debit_Credit
+1010,Cash and Cash Equivalents,Balance Sheet,1250000.00,Debit
+1100,Gross Trade Receivables,Balance Sheet,5000000.00,Debit
+1105,Allowance for Credit Losses (Ind AS 109),Balance Sheet,94500.00,Credit
+1500,Right-of-Use Asset - Cost,Balance Sheet,1263709.16,Debit
+1505,Accumulated Amortization - ROU Asset,Balance Sheet,252741.83,Credit
+2010,Trade Payables,Balance Sheet,850000.00,Credit
+2500,Lease Liability,Balance Sheet,1039531.71,Credit
+3010,Common Stock,Balance Sheet,2000000.00,Credit
+3020,Retained Earnings (Opening),Balance Sheet,2500000.00,Credit
+4010,Revenue from Operations,Income Statement,4200000.00,Credit
+5100,Depreciation & Amortization - ROU Asset,Income Statement,252741.83,Debit
+5200,Lease Interest Expense,Income Statement,75822.55,Debit
+5300,Provision for Credit Losses,Income Statement,94500.00,Debit
+5400,Operating Lease / Rent Expense,Income Statement,0.00,Debit
+5900,General & Administrative Expenses,Income Statement,2950000.00,Debit
