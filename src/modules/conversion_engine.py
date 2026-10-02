@@ -5,8 +5,12 @@ import pandas as pd
 
 class GAAPConversionEngine:
     def __init__(self, trial_balance_path: str, lease_contracts_path: str):
-        self.tb_df = self._load_and_clean_csv(trial_balance_path)
-        self.leases_df = self._load_and_clean_csv(lease_contracts_path)
+        self.trial_balance_path = trial_balance_path
+        self.lease_contracts_path = lease_contracts_path
+
+        self.tb_df = self._load_and_clean_csv(self.trial_balance_path)
+        self.leases_df = self._load_and_clean_csv(self.lease_contracts_path)
+
         self.journal_vouchers: List[Dict[str, object]] = []
         self.jv_counter = 1
 
@@ -14,10 +18,14 @@ class GAAPConversionEngine:
     def _load_and_clean_csv(path: str) -> pd.DataFrame:
         if not os.path.exists(path):
             raise FileNotFoundError(f"Input file not found: {path}")
+
         df = pd.read_csv(path)
         df.columns = [str(col).strip() for col in df.columns]
-        for col in df.select_dtypes(include=["object"]).columns:
-            df[col] = df[col].astype(str).str.strip()
+
+        # Force Account_Code to string type so lookups never fail
+        if "Account_Code" in df.columns:
+            df["Account_Code"] = df["Account_Code"].astype(str).str.strip()
+
         return df
 
     @staticmethod
@@ -44,10 +52,10 @@ class GAAPConversionEngine:
         total_delta = 0.0
 
         for _, row in self.leases_df.iterrows():
-            if str(row["US_GAAP_Classification"]).upper() != "OPERATING":
+            if str(row["US_GAAP_Classification"]).strip().upper() != "OPERATING":
                 continue
 
-            contract_id = row["Contract_ID"]
+            contract_id = str(row["Contract_ID"]).strip()
             payment = float(row["Annual_Payment"])
             term = int(row["Term_Years"])
             rate = float(row["Discount_Rate"])
@@ -79,7 +87,11 @@ class GAAPConversionEngine:
         }
 
     def process_ecl_adjustments(self, ind_as_rate=0.0189, cecl_lifetime_rate=0.0350) -> Dict[str, float]:
-        receivables_row = self.tb_df[self.tb_df["Account_Code"] == "1100"]
+        receivables_row = self.tb_df[self.tb_df["Account_Code"].astype(str).str.strip() == "1100"]
+
+        if receivables_row.empty:
+            raise ValueError("Gross Trade Receivables (Account 1100) not found in Trial Balance.")
+
         gross_receivables = float(receivables_row["IndAS_Balance"].values[0])
 
         current_reserve = round(gross_receivables * ind_as_rate, 2)
