@@ -38,4 +38,30 @@ Bash
 %cd dual-gaap-engine
 !python main.py
 
+📂 Custom Data Format Specifications
+When uploading custom CSV files, match the following column schemas:
+
+1. Trial Balance (trial_balance.csv)
+Must include account 1100 representing gross trade receivables.
    
+Account_Code,Account_Name,Financial_Statement,IndAS_Balance,Debit_Credit
+1010,Cash and Cash Equivalents,Balance Sheet,1250000.00,Debit
+1100,Gross Trade Receivables,Balance Sheet,5000000.00,Debit
+1105,Allowance for Credit Losses,Balance Sheet,94500.00,Credit
+1500,Right-of-Use Asset - Cost,Balance Sheet,1263709.16,Debit
+1505,Accumulated Amortization - ROU Asset,Balance Sheet,252741.83,Credit
+
+
+2. Lease Register (lease_contracts.csv)
+Discount_Rate must be entered as a decimal (e.g., 0.06 for 6%).
+
+US_GAAP_Classification must be set to Operating.
+Contract_ID,Description,Annual_Payment,Term_Years,Discount_Rate,Payment_Timing,US_GAAP_Classification
+LSE-101,Mumbai Corporate Office,300000.00,5,0.06,Arrears,Operating
+
+🛡️ Audit Controls & Implementation Details
+Direct Mathematical Discounting: Replaces deprecated libraries with iterative cash flow formulas.
+
+Defensive Ledger Typing: Ingestion scripts cast general ledger codes to standardized strings to prevent type mismatches on alphanumeric account numbers.
+
+Automated SOX Balance Assertion: Verifies that Total Debits equal Total Credits. If any imbalance is detected, execution halts before output files can be exported.
