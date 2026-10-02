@@ -32,16 +32,10 @@ Automated Adjustment: The engine records an incremental pre-tax provision of $80
 Method 1: Interactive Web App (No Code)
 Open the Live Web Application.
 
-
-
-
-Method 2: Google ColabRun the complete pipeline directly in Google Colab:Bash!git clone [https://github.com/SaanviPathak-git/dual-gaap-engine.git](https://github.com/SaanviPathak-git/dual-gaap-engine.git)
+Method 2: Google ColabRun the complete pipeline directly in Google Colab:
+Bash
+!git clone [https://github.com/SaanviPathak-git/dual-gaap-engine.git](https://github.com/SaanviPathak-git/dual-gaap-engine.git)
 %cd dual-gaap-engine
 !python main.py
-📂 Custom Data Format SpecificationsIf uploading custom files, format your CSV spreadsheets with the following column headers:1. Trial Balance (trial_balance.csv)Must include account 1100 representing gross trade receivables.Account_CodeAccount_NameFinancial_StatementIndAS_BalanceDebit_Credit1010Cash and Cash EquivalentsBalance Sheet1250000.00Debit1100Gross Trade ReceivablesBalance Sheet5000000.00Debit1105Allowance for Credit LossesBalance Sheet94500.00Credit1500Right-of-Use Asset - CostBalance Sheet1263709.16Debit1505Accumulated Amortization - ROU AssetBalance Sheet252741.83Credit2. Lease Register (lease_contracts.csv)Discount_Rate must be entered in decimal form (e.g., 0.06 for 6%).US_GAAP_Classification must be set to Operating.Contract_IDDescriptionAnnual_PaymentTerm_YearsDiscount_RatePayment_TimingUS_GAAP_ClassificationLSE-101Mumbai Corporate Office300000.0050.06ArrearsOperating🛡️ Audit Controls & Implementation DetailsDirect Mathematical Discounting: Replaces deprecated libraries with iterative cash flow formulas:$$\text{PV} = \sum_{t=1}^{n} \frac{\text{CF}_t}{(1 + r)^t}$$Defensive Ledger Typing: Ingestion scripts cast general ledger codes to standardized strings to prevent type mismatches on alphanumeric account numbers.Automated SOX Balance Assertion: Verifies that $\sum \text{Debits} - \sum \text{Credits} = 0.00$. If any imbalance is detected, execution halts before output files can be exported.
 
-Choose Use Built-in Sample Data to run the pre-configured corporate test case, or select Upload Custom CSVs in the sidebar.
-
-Adjust the CECL Loss Rate Assumptions if desired.
-
-Click Run Dual-GAAP Reconciliation Pipeline to view the variance dashboard, verify balanced debits and credits, and export the output CSV.
+   
